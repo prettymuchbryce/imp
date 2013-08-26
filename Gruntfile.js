@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     }
   });
 
-  var releaseFilename = "bin/Imp-" + grunt.file.readJSON('package.json').version + ".min.js";
+  var releaseFilename = "bin/imp-" + grunt.file.readJSON('package.json').version + ".min.js";
   var files = {};
   files[releaseFilename] = ['src/imp.js', 'src/interface.js', 'src/utils.js'];
   grunt.config.set('uglify.release.files',files)

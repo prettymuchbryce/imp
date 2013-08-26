@@ -1,10 +1,10 @@
 <html>
 	<head>
-		<script type='text/javascript' src='bin/Imp-0.0.1.min.js'></script>
+		<script type='text/javascript' src='bin/imp-0.0.1.min.js'></script>
 		<script>
 			var IAnimal = (function() {
 				Imp.define("IAnimal", this);
-				method("bark").params("sound");
+				method("makeSound").params("sound");
 				method("isMammal");
 			})();
 
@@ -16,8 +16,8 @@
 			var Dog = function() {
 				Imp.lements("IAnimal", this);
 				
-				this.bark = function(sound) {
-					console.log(sound);
+				this.makeSound = function(sound) {
+					console.log("Woof! " + sound);
 				};
 
 				this.isMammal = function() {
@@ -31,11 +31,12 @@
 			};
 
 			var dog = new Dog();
+			dog.makeSound("Hello World.");
 
 			if (Imp.doesImplement("IAnimal", dog)) {
-				console.log("YES");
+				console.log("Dog is an animal");
 			} else {
-				console.log("NO");
+				console.log("Dog is not an animal");
 			}
 		</script>
 	</head>
