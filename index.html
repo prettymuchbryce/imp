@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<script type='text/javascript' src='bin/Imp-0.0.1.min.js'></script>
+		<script>
+			var IAnimal = (function() {
+				Imp.define("IAnimal", this);
+				method("bark").params("sound");
+				method("isMammal");
+			})();
+
+			var IWalkable = (function() {
+				Imp.define("IWalkable", this);
+				method("move").params("direction");
+			})();
+
+			var Dog = function() {
+				Imp.lements("IAnimal", this);
+				
+				this.bark = function(sound) {
+					console.log(sound);
+				};
+
+				this.isMammal = function() {
+					console.log(true);
+				};
+
+				this.canSwim = function() {
+					console.log("YEAH");
+				};
+
+			};
+
+			var dog = new Dog();
+
+			if (Imp.doesImplement("IAnimal", dog)) {
+				console.log("YES");
+			} else {
+				console.log("NO");
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+</html>
