@@ -33,6 +33,4 @@ Interfaces are a common OOP tool in languages like Java. Imp offers a solution f
 
 `Imp.lements(interfaceName, implementation);`
 
-`Imp.doesImplement(interfaceName, implementation);`
-
 `Imp.setProductionMode(); //Remove interface enforcement and console errors.`
