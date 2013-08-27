@@ -27,14 +27,6 @@ Interfaces are a common OOP tool in languages like Java. Imp offers a solution f
       };
     };
     
-#### Checking to see if an object implements an interface
-
-    if (Imp.doesImplement("IAnimal", dog)) {
-      console.log("Dog is an animal");
-    } else {
-      console.log("Dog is not an animal");
-    }
-    
 #### API Recap
 
 `Imp.define(interfaceName, interface);`
