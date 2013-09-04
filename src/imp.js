@@ -6,6 +6,9 @@ var Imp = (function() {
 	};
 
 	this.lements = function(interfaceReference, implementation) {
+		if (_isProductionMode) {
+			return;
+		}
 		setTimeout(function() {
 			validate(interfaceReference, implementation, !_isProductionMode);
 		},1);
@@ -44,12 +47,10 @@ var Imp = (function() {
 		}
 
 		if (errors.length > 0) {
-			for (var i = 0; i < errors.length; i++) {
-				if (throwErrors) {
-					throw errors[i];
-				}
-				return false;
+			if (throwErrors) {
+				throw "\n\n" + errors.join("\n\n");
 			}
+			return false;
 		}
 
 		return true;
