@@ -1,75 +1,52 @@
 var Imp = (function() {
-	var _interfaces = {};
 	var _isProductionMode = false;
 
 	this.setProductionMode = function() {
 		_isProductionMode = true;
 	};
 
-	this.lements = function(interfaceName, object) {
+	this.lements = function(interfaceReference, implementation) {
 		setTimeout(function() {
-			validate(interfaceName, object, !_isProductionMode);
+			validate(interfaceReference, implementation, !_isProductionMode);
 		},1);
 	};
 
-	this.define = function(name, object) {
-		var jsInterface = new Imp.Interface(name);
-		_interfaces[name] = jsInterface;
-		object.method = function(/* ... */) {
-			var stringArguments = [];
-			for (var i = 0; i < arguments.length; i++) {
-				stringArguments.push(arguments[i]);
-			}
-			return jsInterface.addMethod(stringArguments.shift(), stringArguments);
-		};
+	this.doesImplement = function(interfaceReference, object) {
+		return validate(interfaceReference, object);
 	};
 
-	this.doesImplement = function(interfaceName, object) {
-		return validate(interfaceName, object);
-	};
-
-	var validate = function(interfaceName, object, throwErrors) {
-		if (!_interfaces.hasOwnProperty(interfaceName)) {
-			if (throwErrors) {
-				throw "No interface exists by the name of " + interfaceName + ".";
-			}
+	var validate = function(interfaceReference, implementation, throwErrors) {
+		if (!interfaceReference || !interfaceReference.methods) {
+			throw "Invalid interface declaration. See documentation.";
 			return false;
 		}
 
-		var jsInterface = _interfaces[interfaceName];
+		var errors = [];
 
-		var allMethodsObject = jsInterface.methods;
-		var methodsNotFound = [];
-		for (var key in allMethodsObject) {
-			methodsNotFound.push(key);
-		}
-
-		for (var key in object) {
-			if (!jsInterface.methods[key]) {
+		for (var i = 0; i < interfaceReference.methods.length; i++) {
+			var methodName = interfaceReference.methods[i].name;
+			if (!implementation[methodName]) {
+				errors.push("imp: Method " + methodName + " must be defined in order to implement this interface.")
 				continue;
 			}
 			
-			paramNames = Imp.utils.getParamNames(object[key]);
+			paramNames = Imp.utils.getParamNames(implementation[methodName]);
 			
-			if (!Imp.utils.compareArrays(jsInterface.methods[key].arguments, paramNames)) {
-				if (throwErrors) {
-					throw "Incompatible method signature for method " + key + " on interface " + interfaceName + ".";
-				}
-				return false;
+			var interfaceMethodParams = [];
+			if (interfaceReference.methods[i].params) {
+				interfaceMethodParams = interfaceReference.methods[i].params;
 			}
 
-			for (var i = 0; i < methodsNotFound.length; i++) {
-				if (methodsNotFound[i] === key) {
-					methodsNotFound.splice(i,1);
-				}
+			if (!Imp.utils.compareArrays(interfaceMethodParams, paramNames)) {
+				errors.push("imp: Incompatible method signature for method " + methodName + ".")
+				continue;
 			}
-			
 		}
 
-		if (methodsNotFound.length > 0) {
-			for (var i = 0; i < methodsNotFound.length; i++) {
+		if (errors.length > 0) {
+			for (var i = 0; i < errors.length; i++) {
 				if (throwErrors) {
-					throw "Method " + methodsNotFound[i] + " must be defined in order to implement interface " + interfaceName + ".";
+					throw errors[i];
 				}
 				return false;
 			}

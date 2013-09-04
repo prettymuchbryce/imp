@@ -1,46 +1,138 @@
 <html>
 	<head>
-		<script type='text/javascript' src='bin/imp-0.0.1.min.js'></script>
+		<script type='text/javascript' src='bin/imp-0.0.2.min.js'></script>
 		<script>
-			var IAnimal = (function() {
-				Imp.define("IAnimal", this);
-				method("makeSound").params("sound");
-				method("isMammal");
-			})();
+			/*
+				 _                   _     
+				(_)_ __ ___  _ __   (_)___ 
+				| | '_ ` _ \| '_ \  | / __|
+				| | | | | | | |_) | | \__ \
+				|_|_| |_| |_| .__(_)/ |___/
+				            |_|   |__/     
+				Interfaces in JavaScript.
+			*/
+						
 
-			var IWalkable = (function() {
-				Imp.define("IWalkable", this);
-				method("move").params("direction");
-			})();
+			//Here we define our interfaces.
+			//These interfaces could be defined in a seperate JS file, or in a JSON file.
 
+			var IAnimal = 
+			{
+				"methods": [ 
+					{ "name" : "makeSound", "params": ["sound"] },
+					{ "name" : "isMammal" },
+					{ "name" : "isDomestic" }
+				]
+			}
+
+			var IPetOwner =
+			{
+				"methods": [
+					{ "name" : "addPet", "params": ["animal"] },
+					{ "name" : "hasPet" }
+				]
+			}
+
+			//Below are the implementations.
+			
 			var Dog = function() {
-				Imp.lements("IAnimal", this);
-				
+				Imp.lements(IAnimal, this);
+
 				this.makeSound = function(sound) {
 					console.log("Woof! " + sound);
 				};
 
 				this.isMammal = function() {
-					console.log(true);
+					return true;
 				};
 
-				this.canSwim = function() {
-					console.log("YEAH");
+				this.isDomestic = function() {
+					return true;
 				};
-
 			};
 
-			var dog = new Dog();
-			dog.makeSound("Hello World.");
+			var Cat = function() {
+				Imp.lements(IAnimal, this);
 
-			if (Imp.doesImplement("IAnimal", dog)) {
-				console.log("Dog is an animal");
-			} else {
-				console.log("Dog is not an animal");
+				this.makeSound = function(sound) {
+					console.log("Meow! " + sound);
+				};
+
+				this.isMammal = function() {
+					return true;
+				};
+
+				this.isDomestic = function() {
+					return true;
+				};
+			};
+
+			var Person = function() {
+				Imp.lements(IAnimal, this);
+				Imp.lements(IPetOwner, this);
+
+				var pets = [];
+
+				this.makeSound = function(sound) {
+					console.log("I'd like to pay with my credit card. " + sound);
+				};
+
+				this.isMammal = function() {
+					return true;
+				};
+
+				this.addPet = function(animal) {
+					if (animal === this) {
+						throw "You cannot be your own pet";
+						return;
+					}
+
+					//Notice here that we can also check if
+					//a particular object implements an interface, and
+					//make some decisions about how to handle the case
+					//that someone tries to improperly use our API.
+					if (!Imp.doesImplement(IAnimal, animal)) {
+						throw "Pet must implement IAnimal.";
+						return;
+					}
+
+					//Once we've ensured that animal indeed implements IAnimal,
+					//we can make the confident assumption that it has the isDomestic method.
+					if (!animal.isDomestic()) {
+						throw "Pet must be domestic.";
+						return;
+					}
+
+					pets.push(IAnimal);
+				};
+
+				this.hasPet = function() {
+					return (pets.length > 0);
+				};
+
+				this.isDomestic = function() {
+					return false;
+				};
 			}
+
+			var dog = new Dog();
+			dog.makeSound("Hello World");
+
+			var cat = new Cat();
+			cat.makeSound("Hello World");
+
+			var person = new Person();
+			person.makeSound("Hello World");
+
+			person.addPet(cat);
+			person.addPet(dog);
+
+			//Try it out yourself. Try to add a pet to a cat, or make
+			//a person the pet of another person.
+
 		</script>
 	</head>
-
 	<body>
+		view console
 	</body>
 </html>

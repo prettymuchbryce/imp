@@ -1,36 +1,50 @@
-# imp
+`        _                   _     
+        (_)_ __ ___  _ __   (_)___ 
+        | | '_ ` _ \| '_ \  | / __|
+        | | | | | | | |_) | | \__ \
+        |_|_| |_| |_| .__(_)/ |___/
+                    |_|   |__/     
+        Interfaces in JavaScript.`
 
-> Interfaces in Javascript.
+Find the minified file in the bin directory.
 
 #### About 
 
 Interfaces are a common OOP tool in languages like Java. Imp offers a solution for using interfacing in Javascript. Imp checks method names, and parameter names. Imp throws runtime errors if your classes fail to properly implement their interfaces. 
+
 #### Defining an interface
 
-    var IAnimal = (function() {
-      Imp.define("IAnimal", this);
-      method("makeSound").params("message");
-      method("isMammal");
-    })();
+`var IAnimal = 
+{
+  "methods": [ 
+    { "name" : "makeSound", "params": ["sound"] },
+    { "name" : "isMammal" },
+    { "name" : "isDomestic" }
+  ]
+}`
     
 #### Ensuring a class implements this interface
 
-    var Dog = function() {
-      Imp.lements("IAnimal", this);
-    				
-      this.makeSound = function(message) {
-        console.log("Woof!" + message);
-      };
-      
-      this.isMammal = function() {
-        return true;
-      };
-    };
+`var Dog = function() {
+  Imp.lements(IAnimal, this);
+				
+  this.makeSound = function(sound) {
+    console.log("Woof!" + sound);
+  };
+  
+  this.isMammal = function() {
+    return true;
+  };
+
+  this.isDomestic = function() {
+    return true;
+  }
+};`
     
 #### API Recap
 
-`Imp.define(interfaceName, interface);`
+`Imp.lements(interfaceReference, implementation);`
 
-`Imp.lements(interfaceName, implementation);`
+`Imp.doesImplement(interfaceReference, implementation);`
 
 `Imp.setProductionMode(); //Remove interface enforcement and console errors.`
