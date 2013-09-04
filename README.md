@@ -31,7 +31,7 @@ Interfaces are a common OOP tool in languages like Java. Imp offers a solution f
 
   		this.isDomestic = function() {
     			return true;
-  		}
+  		};
 	};
     
 #### API Recap
